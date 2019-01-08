@@ -1,0 +1,16 @@
+{
+  "name": "iconfontgenerator",
+  "version": "1.0.0",
+  "description": "Fonts icon geration tool",
+  "main": "index.js",
+  "author": "Luciano Baraúna",
+  "license": "MIT",
+  "scripts": {
+    "gulp": "gulp",
+    "start": "yarn gulp"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.0",
+    "gulp-iconfont": "^10.0.2"
+  }
+}
