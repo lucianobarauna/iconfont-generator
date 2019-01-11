@@ -28,7 +28,7 @@ const fontName = 'foo-font'
 const configPlugins = {
   iconFont: {
     fontName,
-    formats: ['ttf', 'eot', 'woff']
+    formats: ['ttf', 'eot', 'woff', 'woff2']
   },
   iconFontCss: {
     fontName,
@@ -66,7 +66,7 @@ function previewCompileSass() {
   */
   return gulp.src(paths.dist.sass)
     .pipe(gulpSass())
-    .pipe(gulp.dest('./preview/icons/css/'))
+    .pipe(gulp.dest('./preview/icons/'))
 }
 
 // Copy folder icons build to preview
