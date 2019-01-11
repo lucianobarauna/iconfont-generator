@@ -5,3 +5,8 @@
 body {
   font-size: 1.6rem
 }
+
+i {
+  font-size: 24rem;
+  color: red
+}
