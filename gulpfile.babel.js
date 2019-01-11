@@ -1,5 +1,6 @@
 import gulp from 'gulp';
 import del from 'del';
+import fsExtra from 'fs-extra'
 import gulpIconFont from 'gulp-iconfont';
 import gulpIconFontCss from 'gulp-iconfont-css';
 import { create as browserSyncCreate, 
@@ -38,6 +39,7 @@ const configPlugins = {
   }
 }
 
+// Build 
 export const clean = () => del([paths.dist.src])
 
 function createIcons() {
@@ -53,32 +55,44 @@ function createIcons() {
     .pipe(gulp.dest(paths.svg.dist))
 }
 
-export function sass() {
+// Preview methods
+
+// Clean folder icons in preview
+export const previewClean = () => del('./preview/icons')
+
+function previewCompileSass() {
   /*
-  * Compile sass
+  * Compile sass to preview
   */
   return gulp.src(paths.dist.sass)
     .pipe(gulpSass())
-    .pipe(gulp.dest('./preview/css/'))
+    .pipe(gulp.dest('./preview/icons/css/'))
 }
+
+// Copy folder icons build to preview
+const previewCopyFont = () => fsExtra.copy('./dist/fonts', './preview/icons/fonts')
 
 function server() {
   /*
-   * Create server
+   * Create server to preview
    */
   browserSyncCreate().init({
       server: {
-        baseDir: './dist'
+        baseDir: './preview'
       }
   })
 }
 
-
 const build = gulp.series(clean, createIcons)
-const server = gulp.series(sass, server)
+const preview = gulp.series(
+    previewClean, 
+    previewCopyFont, 
+    previewCompileSass, 
+    server
+  )
 
 export { 
   build,
-  server 
+  preview
 }
 
