@@ -32,7 +32,7 @@ const configPlugins = {
   },
   iconFontCss: {
     fontName,
-    path: 'src/templates/_icons.scss',
+    path: 'src/templates/icons.scss',
     targetPath: '../../dist/scss/icons.scss',
     fontPath: './fonts/',
     cssClass: 'iconfoo'
@@ -81,6 +81,7 @@ function server() {
         baseDir: './preview'
       }
   })
+
 }
 
 const build = gulp.series(clean, createIcons)
