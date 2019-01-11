@@ -22,7 +22,7 @@
 }
 
 <% _.each(glyphs, function(glyph) { %>
-.<%= cssClass%>-<%= glyph.fileName %> {
+.<%= cssClass%>-<%= glyph.fileName %>::before {
   content: "\<%= glyph.codePoint %>"
 }
 <% });%>
