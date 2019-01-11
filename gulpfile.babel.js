@@ -3,13 +3,9 @@ import del from 'del';
 import fsExtra from 'fs-extra'
 import gulpIconFont from 'gulp-iconfont';
 import gulpIconFontCss from 'gulp-iconfont-css';
-import {  create as browserSyncCreate, 
-          stream as browserSyncStream,
-          reload as browserSyncReload
-      } from 'browser-sync';
+import browserSync from 'browser-sync';
 import gulpSass from 'gulp-sass';
 import gulpPug from 'gulp-pug';
-
 
 const paths = {
     dist: {
@@ -75,12 +71,12 @@ function server() {
   /*
    * Create server to preview
    */
-  browserSyncCreate().init({
-      server: {
-        baseDir: 'preview'
-      }
+  browserSync({
+    server: {
+      baseDir: 'preview'
+    }
   })
-  gulp.watch('index.html', {cwd: 'preview'}).on('change', browserSyncReload)
+  gulp.watch(['*.html', '*.css'], {cwd: 'preview'}).on('change', browserSync.reload)
 
 }
 
