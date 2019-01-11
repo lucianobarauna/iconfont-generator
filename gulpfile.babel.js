@@ -3,10 +3,12 @@ import del from 'del';
 import fsExtra from 'fs-extra'
 import gulpIconFont from 'gulp-iconfont';
 import gulpIconFontCss from 'gulp-iconfont-css';
-import { create as browserSyncCreate, 
-          stream as browserSyncStream } from 'browser-sync';
+import {  create as browserSyncCreate, 
+          stream as browserSyncStream,
+          reload as browserSyncReload
+      } from 'browser-sync';
 import gulpSass from 'gulp-sass';
-
+import gulpPug from 'gulp-pug';
 
 
 const paths = {
@@ -49,9 +51,6 @@ function createIcons() {
   return gulp.src(paths.svg.src)
     .pipe(gulpIconFontCss(configPlugins.iconFontCss))
     .pipe(gulpIconFont(configPlugins.iconFont))
-    .on('glyphs', (glyphs, options) => {
-        console.log(glyphs, options)
-    })
     .pipe(gulp.dest(paths.svg.dist))
 }
 
@@ -78,9 +77,10 @@ function server() {
    */
   browserSyncCreate().init({
       server: {
-        baseDir: './preview'
+        baseDir: 'preview'
       }
   })
+  gulp.watch('index.html', {cwd: 'preview'}).on('change', browserSyncReload)
 
 }
 
