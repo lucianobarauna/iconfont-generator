@@ -49,7 +49,7 @@ function createIcons() {
     .pipe(gulpIconFontCss(configPlugins.iconFontCss))
     .pipe(gulpIconFont(configPlugins.iconFont))
     .on('glyphs', function(glyphs, opt) {
-      previewCreateHtml(glyphs, configPlugins.iconFontCss.cssClass)
+      fsExtra.writeJSON('./preview/dataFonts.json', glyphs)
     })
     .pipe(gulp.dest(paths.svg.dist))
 }
@@ -67,18 +67,18 @@ function previewCompileSass() {
     .pipe(gulpSass())
     .pipe(gulp.dest('./preview/icons/'))
 }
-function previewCreateHtml(data, classNameIcon) {
+
+export function previewCreateHtml() {
   /**
-   *
    * Create html to preview
-   * @param {object} data
-   * @param {string} classNameIcon
    */
-  gulp.src('./preview/index.pug')
+  return gulp.src('./preview/index.pug')
     .pipe(gulpData(() => {
       return {
-        classNameIcon,
-        "dataFont": data
+        'dataFont': {
+          "cssClass": configPlugins.iconFontCss.cssClass,
+          "glyphs": fsExtra.readJSONSync('./preview/dataFonts.json')
+        }
       }
     }))
     .pipe(gulpPug({
@@ -107,9 +107,10 @@ function server() {
 
 const build = gulp.series(clean, createIcons)
 const preview = gulp.series(
-    previewClean, 
-    previewCopyFont, 
-    previewCompileSass, 
+    previewClean,
+    previewCreateHtml, 
+    previewCopyFont,
+    previewCompileSass,
     server
   )
 
