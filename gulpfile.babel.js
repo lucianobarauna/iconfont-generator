@@ -12,9 +12,14 @@ const paths = {
     dist: {
       src: './dist',
       sass: './dist/scss/*.scss',
+      fonts: './dist/fonts'
     },
     preview: {
-      
+      src: './preview',
+      icons: './preview/icons',
+      json: './preview/dataFonts.json',
+      index: './preview/index.pug',
+      fonts: './preview/icons/fonts'
     },
     svg: {
       src: './src/svg/*.svg',
@@ -49,7 +54,7 @@ function createIcons() {
     .pipe(gulpIconFontCss(configPlugins.iconFontCss))
     .pipe(gulpIconFont(configPlugins.iconFont))
     .on('glyphs', function(glyphs, opt) {
-      fsExtra.writeJSON('./preview/dataFonts.json', glyphs)
+      fsExtra.writeJSON(paths.preview.json, glyphs)
     })
     .pipe(gulp.dest(paths.svg.dist))
 }
@@ -57,7 +62,7 @@ function createIcons() {
 // Preview methods
 
 // Clean folder icons in preview
-export const previewClean = () => del('./preview/icons')
+export const previewClean = () => del(paths.preview.icons)
 
 function previewCompileSass() {
   /*
@@ -65,32 +70,32 @@ function previewCompileSass() {
   */
   return gulp.src(paths.dist.sass)
     .pipe(gulpSass())
-    .pipe(gulp.dest('./preview/icons/'))
+    .pipe(gulp.dest(paths.preview.icons))
 }
 
 export function previewCreateHtml() {
   /**
    * Create html to preview
    */
-  return gulp.src('./preview/index.pug')
+  return gulp.src(paths.preview.index)
     .pipe(gulpData(() => {
       return {
         'dataFont': {
           "cssClass": configPlugins.iconFontCss.cssClass,
-          "glyphs": fsExtra.readJSONSync('./preview/dataFonts.json')
+          "glyphs": fsExtra.readJSONSync(paths.preview.json)
         }
       }
     }))
     .pipe(gulpPug({
       pretty: true
     }))
-    .pipe(gulp.dest('./preview'))
+    .pipe(gulp.dest(paths.preview.src))
 }
 
 /**
  * Copy build font icon to folder preview
  */
-const previewCopyFont = () => fsExtra.copy('./dist/fonts', './preview/icons/fonts')
+const previewCopyFont = () => fsExtra.copy(paths.dist.fonts, paths.preview.fonts)
 
 function server() {
   /*
