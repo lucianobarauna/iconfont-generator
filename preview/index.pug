@@ -1,0 +1,10 @@
+doctype html
+html(lang="en")
+  head
+    title Preview incons
+    link(rel="stylesheet", href="./icons/icons.css")
+    link(rel="stylesheet", href="main.css")
+  body
+    each prop, index in dataFont
+      i(class=classNameIcon + ' ' + classNameIcon + '-' + prop.name)
+  

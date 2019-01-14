@@ -6,6 +6,7 @@ import gulpIconFontCss from 'gulp-iconfont-css';
 import browserSync from 'browser-sync';
 import gulpSass from 'gulp-sass';
 import gulpPug from 'gulp-pug';
+import gulpData from 'gulp-data';
 
 const paths = {
     dist: {
@@ -47,6 +48,9 @@ function createIcons() {
   return gulp.src(paths.svg.src)
     .pipe(gulpIconFontCss(configPlugins.iconFontCss))
     .pipe(gulpIconFont(configPlugins.iconFont))
+    .on('glyphs', function(glyphs, opt) {
+      previewCreateHtml(glyphs, configPlugins.iconFontCss.cssClass)
+    })
     .pipe(gulp.dest(paths.svg.dist))
 }
 
@@ -63,8 +67,29 @@ function previewCompileSass() {
     .pipe(gulpSass())
     .pipe(gulp.dest('./preview/icons/'))
 }
+function previewCreateHtml(data, classNameIcon) {
+  /**
+   *
+   * Create html to preview
+   * @param {object} data
+   * @param {string} classNameIcon
+   */
+  gulp.src('./preview/index.pug')
+    .pipe(gulpData(() => {
+      return {
+        classNameIcon,
+        "dataFont": data
+      }
+    }))
+    .pipe(gulpPug({
+      pretty: true
+    }))
+    .pipe(gulp.dest('./preview'))
+}
 
-// Copy folder icons build to preview
+/**
+ * Copy build font icon to folder preview
+ */
 const previewCopyFont = () => fsExtra.copy('./dist/fonts', './preview/icons/fonts')
 
 function server() {
