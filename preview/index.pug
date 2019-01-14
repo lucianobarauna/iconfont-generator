@@ -5,6 +5,8 @@ html(lang="en")
     link(rel="stylesheet", href="./icons/icons.css")
     link(rel="stylesheet", href="main.css")
   body
-    each prop, index in dataFont
-      i(class=classNameIcon + ' ' + classNameIcon + '-' + prop.name)
-  
+    - let classIcon = dataFont.cssClass + ' ' + dataFont.cssClass + '-'
+    each prop, index in dataFont.glyphs
+      .box
+        i(class=classIcon + prop.name)
+        code='.' + classIcon + prop.name
